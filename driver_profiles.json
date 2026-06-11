@@ -26,5 +26,19 @@
       37.4,
       12.2
     ]
+  },
+  "ABC": {
+    "left_thresh": 0.2412,
+    "right_thresh": 0.2402,
+    "left_baseline": 0.3216,
+    "right_baseline": 0.3202,
+    "left_eye_size": [
+      21.4,
+      8.0
+    ],
+    "right_eye_size": [
+      21.9,
+      7.9
+    ]
   }
 }
