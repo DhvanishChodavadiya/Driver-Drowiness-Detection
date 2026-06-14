@@ -32,5 +32,25 @@
       21.9,
       7.9
     ]
+  },
+  "Abhay": {
+    "left_thresh": 0.2287,
+    "right_thresh": 0.2205,
+    "left_baseline": 0.305,
+    "right_baseline": 0.294
+  },
+  "abhi": {
+    "left_thresh": 0.2501,
+    "right_thresh": 0.2432,
+    "left_baseline": 0.3334,
+    "right_baseline": 0.3242,
+    "left_eye_size": [
+      36.5,
+      12.2
+    ],
+    "right_eye_size": [
+      42.0,
+      13.6
+    ]
   }
 }

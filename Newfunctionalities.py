@@ -148,6 +148,18 @@ def ear(lms, indices):
     C = distance.euclidean(pts[0], pts[3])
     return (A + B) / (2.0 * C)
 
+def eye_size(lms, indices):
+    pts = np.array([lms[i] for i in indices], dtype=np.float64)
+
+    width = distance.euclidean(pts[0], pts[3])
+
+    height1 = distance.euclidean(pts[1], pts[5])
+    height2 = distance.euclidean(pts[2], pts[4])
+
+    height = (height1 + height2) / 2
+
+    return round(width,1), round(height,1)
+
 def mar(lms):
     pts = np.array([lms[i] for i in MOUTH_IDX], dtype=np.float64)
     A = distance.euclidean(pts[0], pts[1])
@@ -259,10 +271,25 @@ def load_profiles():
             return json.load(f)
     return {}
 
-def save_profile(name, lt, rt, lb, rb):
+def save_profile(name, lt, rt, lb, rb, left_eye_size, right_eye_size):
     p = load_profiles()
-    p[name] = {"left_thresh": round(lt,4), "right_thresh": round(rt,4),
-               "left_baseline": round(lb,4), "right_baseline": round(rb,4)}
+    p[name] = {
+    "left_thresh": round(lt,4),
+    "right_thresh": round(rt,4),
+
+    "left_baseline": round(lb,4),
+    "right_baseline": round(rb,4),
+
+    "left_eye_size": [
+        round(float(left_eye_size[0]),1),
+        round(float(left_eye_size[1]),1)
+    ],
+
+    "right_eye_size": [
+        round(float(right_eye_size[0]),1),
+        round(float(right_eye_size[1]),1)
+    ]
+}
     with open(PROFILES_FILE, "w") as f:
         json.dump(p, f, indent=2)
     print(f"[SAVED] Profile '{name}'")
@@ -273,6 +300,8 @@ def load_profile(name):
 # ─── Calibration ──────────────────────────────────────────────────
 def calibrate(cap, landmarker, K, n=CALIB_FRAMES):
     le, re = [], []
+    left_sizes = []
+    right_sizes = []
     print("[CALIBRATION] Keep eyes OPEN, face the camera...")
     while True:
         ret, frame = cap.read()
@@ -299,6 +328,11 @@ def calibrate(cap, landmarker, K, n=CALIB_FRAMES):
         if lms:
             l = ear(lms, LEFT_EYE_IDX)
             r = ear(lms, RIGHT_EYE_IDX)
+            lw, lh = eye_size(lms, LEFT_EYE_IDX)
+            rw, rh = eye_size(lms, RIGHT_EYE_IDX)
+
+            left_sizes.append((lw, lh))
+            right_sizes.append((rw, rh))
             draw_eye(frame, lms, LEFT_EYE_IDX,  (0,255,255))
             draw_eye(frame, lms, RIGHT_EYE_IDX, (0,200,255))
             cv2.putText(frame, f"Left EAR:  {l:.3f}", (10,85),
@@ -314,10 +348,12 @@ def calibrate(cap, landmarker, K, n=CALIB_FRAMES):
             break
 
     lb, rb = float(np.mean(le)), float(np.mean(re))
+    left_eye_size = np.mean(left_sizes, axis=0)
+    right_eye_size = np.mean(right_sizes, axis=0)
     lt, rt = clamp_thr(lb*THRESH_RATIO), clamp_thr(rb*THRESH_RATIO)
     print(f"[DONE] Left  baseline={lb:.4f} thresh={lt:.4f}")
     print(f"       Right baseline={rb:.4f} thresh={rt:.4f}")
-    return lt, rt, lb, rb
+    return ( lt, rt, lb, rb, left_eye_size, right_eye_size)
 
 # ─── Main ─────────────────────────────────────────────────────────
 def main(driver_name="Driver"):
@@ -368,9 +404,11 @@ def main(driver_name="Driver"):
         rt = profile["right_thresh"]
         lb = profile["left_baseline"]
         rb = profile["right_baseline"]
+        left_eye_size = profile.get("left_eye_size",[0,0])
+        right_eye_size = profile.get("right_eye_size",[0,0])
     else:
         print(f"[INFO] No profile for '{driver_name}' — calibrating...")
-        lt, rt, lb, rb = calibrate(cap, landmarker, K)
+        (lt, rt, lb, rb,left_eye_size, right_eye_size) = calibrate(cap, landmarker, K)
 
     print("\n[RUNNING] Q=quit  S=save  R=recalibrate\n")
 
@@ -435,6 +473,14 @@ def main(driver_name="Driver"):
             cv2.putText(frame, f"Yaw:{yaw:+.1f}deg  {direction}",
                         (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.55,
                         (0,0,255) if distracted else (0,220,0), 2)
+            cv2.putText(frame, f"Driver: {driver_name}", 
+                        (430, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6,(255, 255, 255), 2)
+            
+            cv2.putText( frame, f"L Eye:{left_eye_size[0]:.1f}x{left_eye_size[1]:.1f}",
+                        (400,55),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255,255,255), 1 )
+            
+            cv2.putText( frame, f"R Eye:{right_eye_size[0]:.1f}x{right_eye_size[1]:.1f}",
+                        (400,75), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255,255,255), 1)
 
         # ── Phone detection (dual method) ──────────────────────────
         hand_close, hand_centroid = hand_near_face(hand_result, lms, w, h)
@@ -514,9 +560,9 @@ def main(driver_name="Driver"):
         if key == ord("q"):
             break
         elif key == ord("s"):
-            save_profile(driver_name, lt, rt, lb, rb)
+            save_profile(driver_name, lt, rt, lb, rb, left_eye_size, right_eye_size)
         elif key == ord("r"):
-            lt, rt, lb, rb = calibrate(cap, landmarker, K)
+            lt, rt, lb, rb, left_eye_size, right_eye_size = calibrate(cap, landmarker, K)
             flag = distract_flag = yawn_flag = yawn_cooldown = 0
             phone_start_time = None
             phone_alert_shown = False
@@ -527,5 +573,10 @@ def main(driver_name="Driver"):
     landmarker.close()
     del hands_model
 
-# ─── Run ──────────────────────────────────────────────────────────
-main(driver_name="Driver")
+# ─── Driver ──────────────────────────────────────────────────────────
+if len(sys.argv) > 1:
+    driver_name = sys.argv[1]
+else:
+    driver_name = "Driver"
+
+main(driver_name)
