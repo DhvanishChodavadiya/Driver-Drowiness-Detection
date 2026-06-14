@@ -1,17 +1,9 @@
 {
   "Driver": {
-    "left_thresh": 0.2177,
-    "right_thresh": 0.2113,
-    "left_baseline": 0.2902,
-    "right_baseline": 0.2818,
-    "left_eye_size": [
-      38.2,
-      12.7
-    ],
-    "right_eye_size": [
-      37.3,
-      11.6
-    ]
+    "left_thresh": 0.259,
+    "right_thresh": 0.2363,
+    "left_baseline": 0.3453,
+    "right_baseline": 0.315
   },
   "Dhvanish": {
     "left_thresh": 0.2064,
