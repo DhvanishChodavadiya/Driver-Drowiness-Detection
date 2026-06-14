@@ -46,3 +46,8 @@ Real-time feedback so you can see exactly what the system is measuring.
 26> [S] Save profile — saves current calibration
 27> [R] Recalibrate — restarts calibration for new driver or lighting
 28> [Q] Quit — exits cleanly
+
+---Muskan & Pankaj---
+29> Yawn detection - Detects driver yawn along with eyes
+30> Head pose - Detects driver distraction using head pose
+31> Mobile detection - Detects driver hands 
