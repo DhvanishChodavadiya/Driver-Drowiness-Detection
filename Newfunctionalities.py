@@ -37,7 +37,7 @@ def stop_alarm():
 # ─── Constants ────────────────────────────────────────────────────
 CALIB_FRAMES    = 80
 THRESH_RATIO    = 0.75
-FRAME_CHECK     = 20
+FRAME_CHECK     = 40
 BLINK_FILTER    = 0.16
 YAW_THRESHOLD   = 30
 DISTRACT_FRAMES = 120
@@ -618,7 +618,7 @@ def main(driver_name="Driver"):
 
             perclos_warning = ""
 
-            if window_fill >= 100:
+            if window_fill >= 100:  
 
                 if perclos >= 30:
 
@@ -765,6 +765,17 @@ def main(driver_name="Driver"):
             flag = distract_flag = yawn_flag = yawn_cooldown = 0
             phone_start_time = None
             phone_alert_shown = False
+            # Reset PERCLOS
+
+            perclos_window.clear()
+
+            perclos = 0.0
+
+            perclos_status = "CALIBRATING"
+
+            perclos_color = (255,255,255)
+
+            perclos_warning = ""
             stop_alarm()
 
     cap.release()
