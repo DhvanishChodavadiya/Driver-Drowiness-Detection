@@ -1,4 +1,3 @@
-
 {
   "Driver": {
     "left_thresh": 0.259,
@@ -81,6 +80,33 @@
       34.0,
       10.4
     ]
+  },
+  "ccc": {
+    "left_thresh": 0.2618,
+    "right_thresh": 0.2215,
+    "left_baseline": 0.349,
+    "right_baseline": 0.2953,
+    "left_eye_size": [
+      38.2,
+      13.2
+    ],
+    "right_eye_size": [
+      45.5,
+      13.1
+    ]
+  },
+  "Charli": {
+    "left_thresh": 0.2489,
+    "right_thresh": 0.2311,
+    "left_baseline": 0.3319,
+    "right_baseline": 0.3082,
+    "left_eye_size": [
+      38.1,
+      12.6
+    ],
+    "right_eye_size": [
+      40.3,
+      12.4
+    ]
   }
-
 }

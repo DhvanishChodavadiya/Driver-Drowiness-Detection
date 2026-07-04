@@ -1,17 +1,17 @@
 
 # Driver Drowsiness Detection and Driver Monitoring System
 
-An AI-powered Driver Monitoring System that detects drowsiness, fatigue, yawning, driver distraction, and mobile phone usage in real time using a standard webcam.
+An AI-powered Driver Monitoring System that detects drowsiness, fatigue, yawning, driver distraction, and mobile phone usage in real time using a camera.
 
 ## Features
 
-### 👁️ Eye Aspect Ratio (EAR)
+### Eye Aspect Ratio (EAR)
 - Real-time eye openness monitoring
 - Independent left and right eye analysis
 - Adaptive thresholds for each driver
 - Personalized calibration
 
-### 📊 PERCLOS Monitoring
+### PERCLOS Monitoring
 - 120-second rolling window
 - Measures percentage of eye closure over time
 - Driver state classification:
@@ -20,40 +20,39 @@ An AI-powered Driver Monitoring System that detects drowsiness, fatigue, yawning
   - DROWSY
   - HIGH RISK
 
-### 😴 Drowsiness Detection
+### Drowsiness Detection
 - Detects prolonged eye closure
 - Visual and audio alerts
 - Personalized thresholds based on calibration
 
-### 🥱 Yawn Detection
+### Yawn Detection
 - Mouth Aspect Ratio (MAR) calculation
 - Real-time yawn monitoring
 - False-positive reduction using cooldown logic
 
-### 🚗 Driver Distraction Detection
+### Driver Distraction Detection
 - Head pose estimation
 - Detects looking away from the road
 - Real-time warning system
 
-### 📱 Mobile Phone Detection
+### Mobile Phone Detection
 - MediaPipe Hand Tracking
 - YOLOv8 Phone Detection
 - Phone usage timer
 - Alert for prolonged phone usage while driving
 
-### 🌙 Low-Light Monitoring
+### Low-Light Monitoring
 - Brightness measurement
 - Gamma correction
 - CLAHE enhancement
 - Lighting status indicator
 
-### 👤 Driver Profile System
+### Driver Profile System
 - Saves individual driver calibration
 - Personalized EAR thresholds
 - Automatic profile loading
 - JSON-based profile storage
 
----
 
 ## Technologies Used
 
@@ -66,11 +65,9 @@ An AI-powered Driver Monitoring System that detects drowsiness, fatigue, yawning
 - SciPy
 - Pygame
 
----
 
 ## Project Workflow
 
-```text
 Camera Input
      ↓
 Face Detection
@@ -108,24 +105,14 @@ Q	         Quit
 
 Current Functionalities
 
-✅ Adaptive EAR Thresholds
-
-✅ Driver Profiles
-
-✅ Automatic Calibration
-
-✅ PERCLOS Monitoring
-
-✅ Drowsiness Detection
-
-✅ Yawn Detection
-
-✅ Driver Distraction Detection
-
-✅ Mobile Phone Detection
-
-✅ Low-Light Monitoring
-
-✅ Audio Alerts
-
-✅ Visual Alerts
+-Adaptive EAR Thresholds
+-Driver Profiles
+-Automatic Calibration
+-PERCLOS Monitoring
+-Drowsiness Detection
+-Yawn Detection
+-Driver Distraction Detection
+-Mobile Phone Detection
+-Low-Light Monitoring
+-Audio Alerts
+-Visual Alerts
